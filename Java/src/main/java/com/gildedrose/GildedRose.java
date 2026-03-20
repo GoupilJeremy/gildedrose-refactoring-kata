@@ -13,54 +13,55 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (!item.name.equals(AGED_BRIE)
-                    && !item.name.equals(BACKSTAGE_PASS)) {
-                if (item.quality > 0) {
-                    if (!item.name.equals(SULFURAS)) {
-                        item.quality = item.quality - 1;
-                    }
-                }
+            if (item.name.equals(SULFURAS)) {
+                updateSulfuras(item);
+            } else if (item.name.equals(AGED_BRIE)) {
+                updateAgedBrie(item);
+            } else if (item.name.equals(BACKSTAGE_PASS)) {
+                updateBackstagePass(item);
             } else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1;
-
-                    if (item.name.equals(BACKSTAGE_PASS)) {
-                        if (item.sellIn < 11) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1;
-                            }
-                        }
-
-                        if (item.sellIn < 6) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1;
-                            }
-                        }
-                    }
-                }
+                updateNormal(item);
             }
+        }
+    }
 
-            if (!item.name.equals(SULFURAS)) {
-                item.sellIn = item.sellIn - 1;
-            }
+    private void updateSulfuras(Item item) {
+        // Sulfuras never changes
+    }
 
-            if (item.sellIn < 0) {
-                if (!item.name.equals(AGED_BRIE)) {
-                    if (!item.name.equals(BACKSTAGE_PASS)) {
-                        if (item.quality > 0) {
-                            if (!item.name.equals(SULFURAS)) {
-                                item.quality = item.quality - 1;
-                            }
-                        }
-                    } else {
-                        item.quality = item.quality - item.quality;
-                    }
-                } else {
-                    if (item.quality < 50) {
-                        item.quality = item.quality + 1;
-                    }
-                }
+    private void updateAgedBrie(Item item) {
+        if (item.quality < 50) {
+            item.quality++;
+        }
+        item.sellIn--;
+        if (item.sellIn < 0 && item.quality < 50) {
+            item.quality++;
+        }
+    }
+
+    private void updateBackstagePass(Item item) {
+        if (item.quality < 50) {
+            item.quality++;
+            if (item.sellIn < 11 && item.quality < 50) {
+                item.quality++;
             }
+            if (item.sellIn < 6 && item.quality < 50) {
+                item.quality++;
+            }
+        }
+        item.sellIn--;
+        if (item.sellIn < 0) {
+            item.quality = 0;
+        }
+    }
+
+    private void updateNormal(Item item) {
+        if (item.quality > 0) {
+            item.quality--;
+        }
+        item.sellIn--;
+        if (item.sellIn < 0 && item.quality > 0) {
+            item.quality--;
         }
     }
 }

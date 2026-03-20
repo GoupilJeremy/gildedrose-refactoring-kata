@@ -19,6 +19,8 @@ class GildedRose {
                 updateAgedBrie(item);
             } else if (item.name.equals(BACKSTAGE_PASS)) {
                 updateBackstagePass(item);
+            } else if (item.name.startsWith("Conjured")) {
+                updateConjured(item);
             } else {
                 updateNormal(item);
             }
@@ -52,6 +54,16 @@ class GildedRose {
         item.sellIn--;
         if (item.sellIn < 0) {
             item.quality = 0;
+        }
+    }
+
+    private void updateConjured(Item item) {
+        if (item.quality > 0) item.quality--;
+        if (item.quality > 0) item.quality--;
+        item.sellIn--;
+        if (item.sellIn < 0) {
+            if (item.quality > 0) item.quality--;
+            if (item.quality > 0) item.quality--;
         }
     }
 
